@@ -8,6 +8,14 @@
 
 2. BERT-based Acronym Disambiguation
 
-3. Build Dict Acronym Disambiguation from Document file
+3. Build Acronym Disambiguation Dict from Document file
 
 #### Result:
+
+1. `inference.py` done
+
+###### Usage: `python inference.py --dir_model ./tinyber/checkpoint-100600 --dir_tokenizer ./tinybert/tokenizer`
+
+2. 
+
+3. 
