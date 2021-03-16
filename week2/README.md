@@ -1,24 +1,25 @@
 # Internship AI Engineer Training Program
 
-#### Duration: 15/3/2021 - 21/3/2021
+### Duration: 15/3/2021 - 21/3/2021
 
-#### Task:
+### Task:
 
-1. Inference MLM - TinyBert 
+#### 1. Inference MLM - TinyBert 
 
-2. BERT-based Acronym Disambiguation
+#### 2. learning-based Acronym Disambiguation
 
-3. Build Acronym Disambiguation Dict from Document file
+#### 3. Build Acronym Disambiguation Dict from Document file
 
-#### Result:
+### Result:
 
-1. `inference.py` done
+#### 1. scipt `inference.py` done
 
-###### Usage: `python inference.py --dir_model ./tinyber/checkpoint-100600 --dir_tokenizer ./tinybert/tokenizer`
+##### Usage: `python inference.py --dir_model ./tinyber/checkpoint-100600 --dir_tokenizer ./tinybert/tokenizer`
 
-###### You can download model pretrained [here](https://drive.google.com/drive/folders/1-IlWrDpT2AQVf1j0XOCQzSC5Js8FXtCd?usp=sharing)
+##### You can download model pretrained [here](https://drive.google.com/drive/folders/1-IlWrDpT2AQVf1j0XOCQzSC5Js8FXtCd?usp=sharing)
 
-###### Current result: `Loss: 0.572200`
-2. 
+##### Current result: `Loss: 0.572200`
 
-3. 
+#### 2. 
+
+#### 3. 
