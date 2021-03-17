@@ -12,7 +12,7 @@
 
 ### Result:
 
-#### 1. script `inference.py` done
+#### 1. Script `inference.py` done
 
 ###### Usage: `python inference.py --dir_model ./tinyber/checkpoint-100600 --dir_tokenizer ./tinybert/tokenizer`
 
