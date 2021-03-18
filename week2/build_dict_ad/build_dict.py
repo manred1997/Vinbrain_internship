@@ -1,5 +1,6 @@
 import nltk
 import numpy as np
+import argparse
 
 def largest_indices(array: np.ndarray, n: int) -> tuple:
     """Returns the n largest indices from a numpy array.
@@ -40,7 +41,13 @@ def NER(string):
     return result
 
 if __name__ == "__main__":
-    with open('english_clean.txt', 'r') as f:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_file", type=str, default="./english_clean.txt", help="Input file")
+    parser.add_argument("--output_file", type=str, default="./list_long_form.txt", help="Output file")
+    args = parser.parse_args()
+
+
+    with open(args.input_file, 'r') as f:
         results = []
         for line in f.readlines():
             results.extend(NER(line))
@@ -61,5 +68,5 @@ if __name__ == "__main__":
     top_k_indice = largest_indices(unique[1], 30)[0] # top 30
     top_k_words = unique[0][[top_k_indice.tolist()]]
     print(top_k_words)
-    with open("list_long_form.txt", "w") as f:
+    with open(args.output_file, "w") as f:
         f.write("\n".join(top_k_words))
