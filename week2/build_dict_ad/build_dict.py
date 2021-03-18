@@ -61,3 +61,5 @@ if __name__ == "__main__":
     top_k_indice = largest_indices(unique[1], 30)[0] # top 30
     top_k_words = unique[0][[top_k_indice.tolist()]]
     print(top_k_words)
+    with open("list_long_form.txt", "w") as f:
+        f.write("\n".join(top_k_words))

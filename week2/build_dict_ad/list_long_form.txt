@@ -1,0 +1,30 @@
+image
+xray
+presence
+zone
+mm
+new abnormal area
+fracture
+no presence
+abnormal area
+the right side
+the left side
+number
+bone
+nodule
+rib
+the left
+mass
+pleural effusion
+feature
+multiple
+pneumothorax
+cavity
+the right
+the suggestive
+diagnosis
+opacities
+massnodule
+covid19
+both sides
+consolidation
