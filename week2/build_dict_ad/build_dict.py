@@ -2,6 +2,8 @@ import nltk
 import numpy as np
 import argparse
 import json
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def largest_indices(array: np.ndarray, n: int) -> tuple:
     """Returns the n largest indices from a numpy array.
@@ -59,9 +61,33 @@ if __name__ == "__main__":
 
     vocab = list(map(lambda x: x.lower(), vocab))
     unique = np.unique(vocab, return_counts=True)
-    top_k_indice = largest_indices(unique[1], 40)[0] # top 30
-    top_k_words = unique[0][[top_k_indice.tolist()]]
-    print(len(unique[0]))
+    # top_k_indice = largest_indices(unique[1], 40)[0] # top 30
+    # top_k_words = unique[0][[top_k_indice.tolist()]]
+
+    sorted_unique = []
+    for i in range(len(unique[0])):
+        sorted_unique.append({
+            "freq": unique[1][i],
+            "unique": unique[0][i]
+        })
+    sorted_unique = sorted(sorted_unique, key= lambda x: x["freq"], reverse=True)
+    x = list(range(1, len(sorted_unique)+1))
+    y = []
+    tmp = 0
+    for i in sorted_unique:
+        tmp += i["freq"]
+        y.append(tmp)
+
+    fig = plt.figure(figsize=(8,10))
+    # plt.plot(x, y)
+    sns.barplot(x=x, y=y)
+    sns.lineplot(x=x, y=y)
+    plt.xlabel("Top - k")
+    plt.xticks(np.linspace(1,len(sorted_unique), 10, dtype=int))
+    plt.ylabel("Number of words")
+    plt.title("Histogram of words that can be abbreviated")
+    plt.savefig("histogram_eng_arconym.png")
+    plt.show()
 
     # with open(args.output_file, "w") as f:
     #     f.write("\n".join(top_k_words))
