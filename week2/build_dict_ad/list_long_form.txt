@@ -9,32 +9,32 @@ right side
 fracture
 suggestive
 image
-pleural effusion
 mass
 nodule
-left
+pleural effusion
 feature
+left
 opacities
-pneumothorax
+cavity
 imaging
 multiple
-cavity
-sides
-massnodule
+pneumothorax
 consolidation
-right
 diagnosis
+massnodule
+right
+sides
+atelectasis
+covid19 occupies
 enlarged mediastinum
 fracture rib bone number
+interstitial lesion
 opacity
 pneumonia
-interstitial lesion
-covid19 occupies
-rib bone number
 pulmonary fibrosis
-atelectasis
-right rib bone number
-pulmonary nodules
-disappear abnormal area
+rib bone number
 abnormality
+disappear abnormal area
+edema
+enlarged heart
 other abnormality
