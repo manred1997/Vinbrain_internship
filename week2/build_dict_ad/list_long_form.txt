@@ -1,40 +1,40 @@
-image
-xray
+xray image
 presence
-zone
 mm
+zone
 new abnormal area
-fracture
-no presence
 abnormal area
-the right side
-the left side
-bone
-number
-rib
-the left
-nodule
+left side
+right side
+fracture
+suggestive
+image
 pleural effusion
 mass
+nodule
+left
 feature
-multiple
-the suggestive
-cavity
-pneumothorax
-the right
 opacities
-massnodule
-mid
-diagnosis
-covid19
-both sides
-consolidation
-interstitial lesion
-pneumonia
-abnormality
+pneumothorax
 imaging
-occupies
+multiple
+cavity
+sides
+massnodule
+consolidation
+right
+diagnosis
 enlarged mediastinum
-no suggestive
+fracture rib bone number
 opacity
+pneumonia
+interstitial lesion
+covid19 occupies
+rib bone number
 pulmonary fibrosis
+atelectasis
+right rib bone number
+pulmonary nodules
+disappear abnormal area
+abnormality
+other abnormality

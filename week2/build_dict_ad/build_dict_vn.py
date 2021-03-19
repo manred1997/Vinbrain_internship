@@ -17,7 +17,7 @@ def largest_indices(array: np.ndarray, n: int) -> tuple:
     indices = indices[np.argsort(-flat[indices])]
     return np.unravel_index(indices, array.shape)
 
-def NER(string):
+def POS(string):
     tokenized_string = nltk.word_tokenize(string)
     # print(tokenized_string)
     regex = r"""
@@ -41,7 +41,7 @@ def NER(string):
             continue
     return result
 
-def NER_vn(text):
+def POS_vn(text):
 
     regex = """
     NP: {<Ab>?<A>*<Nb|N>+}
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     with open(args.input_file, 'r', encoding="utf8") as f:
         results = []
         for line in f.readlines():
-            results.extend(NER_vn(line))
+            results.extend(POS_vn(line))
         # print(results)
     # print(len(results[13]))
     vocab = []
