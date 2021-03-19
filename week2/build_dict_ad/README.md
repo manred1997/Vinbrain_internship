@@ -8,6 +8,6 @@
 - Selectop top k indicase.
 
 ##### Result: 
-- list_long_form* is file contains list words that can be abbravate
+- list_long_form* is file contains list words that can be abbreviated
 - And json file contains acronym and expansion respectively
 
