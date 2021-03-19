@@ -1,40 +1,40 @@
 ngày
 lần
-tổn thương
 hình ảnh
 phổi
+tổn thương
+mm
 bên
+kích thước mm
 vùng
-kích thước
+xương
+xương sườn số bên
 hình ảnh tổn thương
-hình
-ngoại vi
 dịch
-đòn phổi
-vùng phổi
-giữa phổi
-trung tâm
+hình
 hình ảnh hình
-kích thước bóng tim
+vùng phổi
+đòn phổi
 bên phổi
-mức độ
 khí
-vùng đỉnh phổi
-mờ kích thước
+kích thước bóng tim
+mức độ
+covid
 khoang màng phổi
+kích thước
+ngoại vi
 trung thất
-mờ dạng phù phổi
-xơ
-xương vi trí
-xương 0
+trung tâm
+vùng đỉnh phổi
+dạng phù phổi
+dạng xẹp phổi
 hang
-số
-vi trí xương sườn số
-hình ảnh khối nốt
-kẽ
 hình ảnh khối
+hình ảnh khối nốt
+hình ảnh trung thất
+kẽ
 lượng
-mờ dạng xẹp phổi
-khối
+xơ
+dạng
+gãy
 hình ảnh nốt
-khối khối
