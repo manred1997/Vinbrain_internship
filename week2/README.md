@@ -25,5 +25,7 @@
 ###### a. AI, AD dataset can download [here1](https://github.com/amirveyseh/AAAI-21-SDU-shared-task-1-AI) and [here2](https://github.com/amirveyseh/AAAI-21-SDU-shared-task-2-AD) respectively. Refer to [paper](https://arxiv.org/pdf/2010.14678.pdf)
 
 ###### b. Reproduce baseline model.
+###### DataLoader file done
+###### Future works: model file
 
-#### 3. 
+#### 3. Build dictionary that contains acronym and expansion respectively. 
