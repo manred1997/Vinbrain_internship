@@ -24,21 +24,16 @@ def POS(string):
     tokenized_string = nltk.word_tokenize(string)
     # print(tokenized_string)
     regex = r"""
-  NP: {<DT>?<JJ>*<NN|NNS>}   # chunk determiner/possessive, adjectives and nouns
-      {<NNP>+}                # chunk sequences of proper nouns
+  NP: {<JJ>*<NN|NNS|NNP>+}   # chunk determiner/possessive, adjectives and nouns
+                # chunk sequences of proper nouns
 """
     chunkParser = nltk.RegexpParser(regex)
-    # print(tokenized_string)
-    # print(nltk.pos_tag(tokenized_string))
+
     ner = chunkParser.parse(nltk.pos_tag(tokenized_string))
-    # print(ner)
     result = []
     for i in ner:
-        # print(i.label())
         try: 
             if i.label() == "NP": result.append(i)
-            # elif i.label() == "NNP": result.append(i)
-            # elif i.label() == "NN": result.append(i)
             else: continue
         except: 
             continue
@@ -70,13 +65,17 @@ if __name__ == "__main__":
     parser.add_argument("--output_file", type=str, default="../list_long_form_vn.txt", help="Output file")
     parser.add_argument("--dict_arc", type=str, default="../dict_acronym_vn.json", help="Json file")
     parser.add_argument("--top_k", type=int, default=40, help="Top k words that can be abbreviated")
+    parser.add_argument("--mode", type=int, default="vn")
     args = parser.parse_args()
 
 
     with open(args.input_file, 'r', encoding="utf8") as f:
         results = []
         for line in f.readlines():
-            results.extend(POS_vn(line))
+            if args.mode == "vn":
+                results.extend(POS_vn(line))
+            else:
+                results.extend(POS(line))
 
     vocab = []
     for i in results:
