@@ -4,7 +4,7 @@ from colorama import Fore
 
 class Sample:
     def __init__(self, tokenizer, expansion, context, start_char_idx, len_acronym, max_seq_lenght=384):
-        self.tokenizer = tokenizer
+        self.tokenizer = tokenizer #tokenizer BertWordPieceTokenizer
         self.expansion = expansion
         self.context = context
         self.start_char_idx = start_char_idx

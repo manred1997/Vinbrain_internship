@@ -16,7 +16,7 @@
 
 ###### Usage: `python inference.py --dir_model ./tinyber/checkpoint-100600 --dir_tokenizer ./tinybert/tokenizer`
 
-###### You can download model pretrained [here](https://drive.google.com/drive/folders/1-IlWrDpT2AQVf1j0XOCQzSC5Js8FXtCd?usp=sharing)
+###### You can download model pretrained [here](https://drive.google.com/drive/folders/1-IlWrDpT2AQVf1j0XOCQzSC5Js8FXtCd?usp=sharing) and [for tokenizer](https://drive.google.com/drive/folders/1Xb30U1uK3XVGGA2M32qB_wCoWmIjUhDD?usp=sharing)
 
 ###### Current result: `Loss: 0.572200`
 
