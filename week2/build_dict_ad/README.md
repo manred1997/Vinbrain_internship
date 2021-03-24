@@ -2,6 +2,8 @@
 
 ##### Usage `python build_dict.py`
 
+##### Usage `python inference.py --text " "`
+
 ##### Rule:  
 - Using Part of speech tagging to pharse sentences.
 - Chunking (combine adj and noun or multiple nouns).   
