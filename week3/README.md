@@ -14,3 +14,9 @@
 
 ### Result:
 
+#### 1. Write script inference for eng and vn
+
+#### 2. Improve acronym dictionary dataset
+
+
+
