@@ -25,7 +25,7 @@ def POS_vn(text):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_file", type=str, default="../data/cleaned_data.txt", help="Input file")
+    parser.add_argument("--input_file", type=str, default="./data/cleaned_data.txt", help="Input file")
     parser.add_argument("--top_k", type=int, default=10000, help="Top k words that can be abbreviated")
     parser.add_argument("--mode", type=str, default="vn")
     args = parser.parse_args()
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     plt.xticks(np.linspace(1,len(sorted_unique), 10, dtype=int))
     plt.ylabel("Number of words")
     plt.title("Histogram of words that can be abbreviated")
-    plt.savefig(f"../result_{args.mode}/histogram_all_acronym_{args.mode}.png")
+    plt.savefig(f"./result_{args.mode}/histogram_all_acronym_{args.mode}.png")
     # plt.show()
     del x, y, fig
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     plt.xticks(np.linspace(1,len(sorted_long_unique), 10, dtype=int))
     plt.ylabel("Number of words")
     plt.title("Histogram of words that can be abbreviated")
-    plt.savefig(f"../result_{args.mode}/histogram_long_acronym_{args.mode}.png")
+    plt.savefig(f"./result_{args.mode}/histogram_long_acronym_{args.mode}.png")
     # plt.show()
     del x, y, fig
 
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     plt.xticks(np.linspace(1,len(sorted_short_unique), 10, dtype=int))
     plt.ylabel("Number of words")
     plt.title("Histogram of words that can be abbreviated")
-    plt.savefig(f"../result_{args.mode}/histogram_short_acronym_{args.mode}.png")
+    plt.savefig(f"./result_{args.mode}/histogram_short_acronym_{args.mode}.png")
     # plt.show()
     del x, y, fig
 
@@ -150,11 +150,11 @@ if __name__ == "__main__":
     del sorted_unique, sorted_short_unique, sorted_long_unique
 
 
-    with open(f"../result_{args.mode}/all_expansion.txt", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/all_expansion.txt", "w", encoding="utf8") as f:
         f.write("\n".join(top_k_all_words))
-    with open(f"../result_{args.mode}/long_expansion.txt", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/long_expansion.txt", "w", encoding="utf8") as f:
         f.write("\n".join(top_k_long_words))
-    with open(f"../result_{args.mode}/short_expansion.txt", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/short_expansion.txt", "w", encoding="utf8") as f:
         f.write("\n".join(top_k_short_words))
 
     dict_all_adcronym = {}
@@ -188,9 +188,9 @@ if __name__ == "__main__":
         tmp += 1
     del top_k_short_words
     
-    with open(f"../result_{args.mode}/all_dict.json", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/all_dict.json", "w", encoding="utf8") as f:
         json.dump(dict_all_adcronym, f)
-    with open(f"../result_{args.mode}/long_dict.json", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/long_dict.json", "w", encoding="utf8") as f:
         json.dump(dict_long_adcronym, f)
-    with open(f"../result_{args.mode}/short_dict.json", "w", encoding="utf8") as f:
+    with open(f"./result_{args.mode}/short_dict.json", "w", encoding="utf8") as f:
         json.dump(dict_short_adcronym, f)
