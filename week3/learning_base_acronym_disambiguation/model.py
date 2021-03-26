@@ -30,23 +30,22 @@ class AcrBertModel(BertPreTrainedModel):
         features_extract = self.bert(input_ids = input_ids, 
                                     attention_mask = attention_mask, 
                                     token_type_ids = token_type_ids)[0]
-
         features_cls = features_extract[:, 0, :].unsqueeze(1)
         if start_token_idx is not None and end_token_idx is not None:
             list_mean_feature_acr = []
-            for idx in range(start_token_idx.shape[0]):
-                feature_acr = features_extract[idx, start_token_idx[idx]:end_token_idx[idx], :].unsqueeze(0)
+            for idx in range(features_extract.size()[0]):
+                feature_acr = features_extract[idx, start_token_idx[idx]:end_token_idx[idx]+1, :].unsqueeze(0)
                 mean_feature_acr = torch.mean(feature_acr, 1, True)
                 list_mean_feature_acr.append(mean_feature_acr)
-        features_crc = torch.cat(list_mean_feature_acr, dim=0)
-
-        features = torch.cat([features_cls, features_crc], dim=2)
-
-        features = self.dropout_1(features)
+        features_arc = torch.cat(list_mean_feature_acr, dim=0)
+        features_in = torch.cat([features_cls, features_arc], dim=2)
+        
+        features = self.dropout_1(features_in)
         features = self.dense_1(features)
         features = self.relu(features)
         features = self.dropout_2(features)
-        features = self.dense_2(features)
+        features = self.dense_2(features).view(-1)
+        
         output = self.sigmoid(features)
 
-        return output
+        return output, features_in
