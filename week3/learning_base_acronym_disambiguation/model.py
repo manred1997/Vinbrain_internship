@@ -1,10 +1,14 @@
 import torch
 import torch.nn as nn
 
-class AcrBertModel(nn.Module):
-    def __init__(self, Bertbase):
+from transformers import BertPreTrainedModel, BertModel
 
-        self.transformers = Bertbase
+class AcrBertModel(BertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+        self.init_weights()
+
+        self.bert = BertModel(config, add_pooling_layer=False)
 
         self.dropout_1 = nn.Dropout(p=0.2)
         self.dense_1  = nn.Linear(768*2, 128)
@@ -12,12 +16,20 @@ class AcrBertModel(nn.Module):
         self.dropout_2 = nn.Dropout(p=0.1)
         self.dense_2 = nn.Linear(128, 1)
         self.sigmoid = nn.Sigmoid()
-    
-    def forward(self, input_ids, token_type_ids, attention_mask, start_token_idx, end_token_idx):
 
-        features_extract = self.transformers(input_ids = input_ids, 
-                                            attention_mask = attention_mask, 
-                                            token_type_ids = token_type_ids)[0]
+        self.init_weights()
+    
+    def forward(
+        self, 
+        input_ids=None, 
+        token_type_ids=None, 
+        attention_mask=None, 
+        start_token_idx=None, 
+        end_token_idx=None):
+
+        features_extract = self.bert(input_ids = input_ids, 
+                                    attention_mask = attention_mask, 
+                                    token_type_ids = token_type_ids)[0]
 
         features_cls = features_extract[:, 0, :].unsqueeze(1)
         if start_token_idx is not None and end_token_idx is not None:
