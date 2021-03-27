@@ -74,7 +74,7 @@ for epoch in range(1, 10):
                          file=sys.stdout, bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.GREEN, Fore.RESET))
     model.train()
     tr_loss = 0
-    nb_tr_steps = 0
+    
     
     for step, batch in enumerate(train_data_loader):
         batch = tuple(t.to(device) for t in batch)
@@ -90,8 +90,8 @@ for epoch in range(1, 10):
         loss.backward()
         optimizer.step()
         tr_loss += loss.item()
-        nb_tr_steps += 1
+        
         training_pbar.update(input_word_ids.size(0))
     training_pbar.close()
-    print(f"\nTraining Binary Cross Entropy loss = {tr_loss/ nb_tr_steps:.4f}")
+    print(f"\nTraining Binary Cross Entropy loss = {tr_loss:.4f}")
     torch.save(model.state_dict(), "./weights_" + str(epoch) + ".pth")
