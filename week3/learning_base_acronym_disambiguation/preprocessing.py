@@ -8,7 +8,7 @@ def normalize(list_token):
     return list(map(lambda x: x.lower(), list_token))
 
 def preprocessing(data: list, mode="train"):
-    if mode in ["train", "val"]:
+    if mode in ["train", "dev"]:
         for sample in data:
             sample["tokens"] = normalize(sample["tokens"])
             sample["text"] = " ".join(sample["tokens"])
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default="../AAAI-21-SDU-shared-task-2-AD/dataset/train.json", 
                         help= "Dataset for Acronym Disambiguation")
-    parser.add_argument("--data_pos", type=str, default="./pos_data",
+    parser.add_argument("--data_folder", type=str, default="./pos_data",
                         help= "Folder for sampling positive dataset")
     parser.add_argument("--mode", type=str, default="train",
                         help= "Mode of dataset")
@@ -56,9 +56,9 @@ if __name__ == "__main__":
     with open(args.data, "r", encoding="UTF-8") as f:
         data = json.load(f)
     
-    if not os.path.isdir(args.data_pos): os.mkdir(args.data_pos)
+    if not os.path.isdir(args.data_folder): os.mkdir(args.data_folder)
 
     data_pos = preprocessing(data, args.mode)
 
-    with open(os.path.join(args.data_pos, f"{args.mode}_pos_data.json"), "w", encoding="UTF-8") as f:
+    with open(os.path.join(args.data_folder, f"{args.mode}_data.json"), "w", encoding="UTF-8") as f:
         json.dump(data_pos, f)
