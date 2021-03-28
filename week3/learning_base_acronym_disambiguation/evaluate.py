@@ -47,22 +47,31 @@ examples_dev = create_examples(dev, "Create dev examples", tokenizer)
 #                             torch.tensor(Y[2], dtype=torch.float))
 
 # dev_sampler = SequentialSampler(dev_data)
-dev_data = AcrDataset(examples, mode="dev")
+dev_data = AcrDataset(examples_dev, mode="dev")
 print(f"Number of samples: {len(dev_data)}")
 dev_data_loader = DataLoader(dev_data, batch_size=16, shuffle="True")
 
 model = AcrBertModel.from_pretrained(pretrained_model_name_or_path="./weights_4.pth",
                                      config="./bert_base/config.json").to(device=device)
 model_inference = []
+validation_pbar = tqdm(total=len(dev_data_loader),
+                           position=0, leave=True,
+                           file=sys.stdout, bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.BLUE, Fore.RESET))
 for step, batch in enumerate(dev_data_loader):
-    batch = tuple(t.to(device=device) for t in batch)
+    # batch = [t.to(device=device) for t in batch]
     input_word_ids, input_type_ids, input_mask, ids, start_token_idx, end_token_idx, expansion, label = batch
-    outputs, _ = model(input_ids=input_word_ids,
-                        token_type_ids=input_type_ids,
-                        attention_mask=input_mask,
-                        start_token_idx=start_token_idx,
-                        end_token_idx=end_token_idx)
-    
+    input_word_ids = input_word_ids.to(device=device)
+    input_type_ids = input_type_ids.to(device=device)
+    input_mask = input_mask.to(device=device)
+    start_token_idx = start_token_idx.to(device=device)
+    end_token_idx = end_token_idx.to(device=device)
+    with torch.no_grad():
+      outputs, _ = model(input_ids=input_word_ids,
+                          token_type_ids=input_type_ids,
+                          attention_mask=input_mask,
+                          start_token_idx=start_token_idx,
+                          end_token_idx=end_token_idx)
+      # print(outputs)
     for idx, output in enumerate(outputs):
         if output > 0.5:
             model_inference.append({
@@ -70,6 +79,8 @@ for step, batch in enumerate(dev_data_loader):
                 "expansion": expansion[idx],
                 "score": output
             })
+    validation_pbar.update(input_word_ids.size(0))
+validation_pbar.close()
 print(f"Number of samples that is inferenced by model: {len(model_inference)}")
 with open("model_inference_on_dev.json", "w", encoding="UTF-8") as f:
     json.dump(model_inference, f)

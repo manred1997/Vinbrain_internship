@@ -48,4 +48,4 @@ class AcrDataset(Dataset):
             end_token_idx = torch.tensor(self.Y[1][idx], dtype=torch.int64)
             expansion = self.Y[2][idx]
             label = torch.tensor(self.Y[3][idx], dtype=torch.float)
-            return input_ids, input_type_ids, attention_mask, ids ,start_token_idx, end_token_idx, expansion, label
+            return input_ids, input_type_ids, attention_mask, ids, start_token_idx, end_token_idx, expansion, label
