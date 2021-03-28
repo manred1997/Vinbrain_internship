@@ -8,7 +8,7 @@ def run_evaluation(args):
         gold = dict([(d['id'], d['expansion']) for d in json.load(file)])
     with open(args.p) as file:
         pred = dict([(d['id'], d['prediction']) for d in json.load(file)])
-        pred = [pred[k] for k,v in gold.items()]
+        pred =  
         gold = [gold[k] for k,v in gold.items()]
     p, r, f1 = score_expansion(gold, pred, verbos=verbose)
     return p, r, f1
