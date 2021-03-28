@@ -15,3 +15,7 @@
 
 ##### Results of model in dev set
 ![](image/results.PNG)
+
+##### Results of paper
+
+![](image/results_paper.PNG)
