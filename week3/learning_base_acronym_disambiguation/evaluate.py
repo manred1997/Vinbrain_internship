@@ -48,22 +48,31 @@ examples_dev = create_examples(dev, "Create dev examples", tokenizer)
 
 # dev_sampler = SequentialSampler(dev_data)
 dev_data = AcrDataset(examples, mode="dev")
+print(f"Number of samples: {len(dev_data)}")
 dev_data_loader = DataLoader(dev_data, batch_size=16, shuffle="True")
 
 model = AcrBertModel.from_pretrained(pretrained_model_name_or_path="./weights_4.pth",
                                      config="./bert_base/config.json").to(device=device)
-
+model_inference = []
 for step, batch in enumerate(dev_data_loader):
     batch = tuple(t.to(device=device) for t in batch)
     input_word_ids, input_type_ids, input_mask, ids, start_token_idx, end_token_idx, expansion, label = batch
-    output, _ = model(input_ids=input_word_ids,
+    outputs, _ = model(input_ids=input_word_ids,
                         token_type_ids=input_type_ids,
                         attention_mask=input_mask,
                         start_token_idx=start_token_idx,
                         end_token_idx=end_token_idx)
     
-        
-    
+    for idx, output in enumerate(outputs):
+        if output > 0.5:
+            model_inference.append({
+                "id": ids[idx],
+                "expansion": expansion[idx],
+                "score": output
+            })
+print(f"Number of samples that is inferenced by model: {len(model_inference)}")
+with open("model_inference_on_dev.json", "w", encoding="UTF-8") as f:
+    json.dump(model_inference, f)
 
 
 
