@@ -5,7 +5,7 @@ import json
 
 from preprocessing import preprocessing
 
-def negative_data(positive_data:list, diction:dict) -> list:
+def negative_data(positive_data:list, diction:dict, mode="train") -> list:
     """
     Funciton: Create negative samples
     args:
@@ -29,8 +29,9 @@ def negative_data(positive_data:list, diction:dict) -> list:
             acronym = sample["tokens"][sample["acronym"]]
             list_neg_expansion = diction[acronym.upper()].copy()
             list_neg_expansion.remove(sample["expansion"])
-            if len(list_neg_expansion) > 1: 
-                list_neg_expansion = random.sample(list_neg_expansion, random.randint(1,2))
+            if mode == "train":
+                if len(list_neg_expansion) > 1: 
+                    list_neg_expansion = random.sample(list_neg_expansion, random.randint(1,2))
             for i in list_neg_expansion:
                 neg_data.append(sample.copy())
                 neg_data[tmp]["expansion"] = i
@@ -42,13 +43,13 @@ def negative_data(positive_data:list, diction:dict) -> list:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_pos", type=str, default="../AAAI-21-SDU-shared-task-2-AD/dataset/train.json", 
+    parser.add_argument("--data_pos", type=str, default="../AAAI-21-SDU-shared-task-2-AD/dataset/dev.json", 
                         help= "Positive dataset for Acronym Disambiguation")
     parser.add_argument("--diction", type=str, default="../AAAI-21-SDU-shared-task-2-AD/dataset/diction.json",
                         help= "Dictionary dataset for Acronym Disambiguation")
-    parser.add_argument("--data_neg", type=str, default="./neg_data",
+    parser.add_argument("--data_neg", type=str, default="./dev_data",
                         help= "Folder for sampling negative dataset")
-    parser.add_argument("--mode", type=str, default="train",
+    parser.add_argument("--mode", type=str, default="dev",
                         help= "Mode of dataset")
 
     args = parser.parse_args()
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     if not os.path.isdir(args.data_neg): os.mkdir(args.data_neg)
 
     data_pos = preprocessing(data_pos, args.mode, "neg")
-    data_neg = negative_data(data_pos, diction)
+    data_neg = negative_data(data_pos, diction, mode="dev")
     print(f"Number of samples: {len(data_neg)}")
 
     with open(os.path.join(args.data_neg, f"{args.mode}_neg_data.json"), "w", encoding="UTF-8") as f:

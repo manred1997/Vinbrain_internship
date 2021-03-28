@@ -3,12 +3,13 @@ import sys
 from colorama import Fore
 
 class Sample:
-    def __init__(self, tokenizer, expansion, context, start_char_idx, len_acronym, label, max_seq_lenght=384):
+    def __init__(self, tokenizer, expansion, context, start_char_idx, len_acronym, ids, label, max_seq_lenght=384):
         self.tokenizer = tokenizer #tokenizer BertWordPieceTokenizer
         self.expansion = expansion
         self.context = context
         self.start_char_idx = start_char_idx
         self.len_acronym = len_acronym
+        self.id = ids
         self.max_seq_lenght = max_seq_lenght
         self.skip = False
         
@@ -69,7 +70,8 @@ def create_examples(raw_data, desc, tokenizer):
         start_char_idx = item["start_char_idx"]
         lenght_acronym = item["lenght_acronym"]
         label = item["label"]
-        example = Sample(tokenizer, expansion, context, start_char_idx, lenght_acronym, label)
+        ids  = item["id"]
+        example = Sample(tokenizer, expansion, context, start_char_idx, lenght_acronym, ids, label)
         example.preprocess()
         examples.append(example)
         p_bar.update(1)

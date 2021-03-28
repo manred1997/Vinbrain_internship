@@ -34,30 +34,51 @@ def preprocessing(data: list, mode: list, label: str):
         return None
     return data
 
-def create_inputs_targets(examples):
+def create_inputs_targets(examples, mode="train"):
     """
     Function: Create dictionary dataset for training
     """
-    dataset_dict = {
-        "input_ids": [],
-        "token_type_ids": [],
-        "attention_mask": [],
-        "start_token_idx": [],
-        "end_token_idx": [],
-        "label": []
-    }
-    for item in examples:
-        if item.skip is False:
-            for key in dataset_dict:
-                dataset_dict[key].append(getattr(item, key))
-    for key in dataset_dict:
-        dataset_dict[key] = np.array(dataset_dict[key])
-        
-    X = [dataset_dict["input_ids"], dataset_dict["token_type_ids"], dataset_dict["attention_mask"]]
-    Y = [dataset_dict["start_token_idx"], dataset_dict["end_token_idx"], dataset_dict["label"]]
-    return X, Y
-
-
+    if mode == "train":
+        dataset_dict = {
+            "input_ids": [],
+            "token_type_ids": [],
+            "attention_mask": [],
+            "start_token_idx": [],
+            "end_token_idx": [],
+            "label": []
+        }
+        for item in examples:
+            if item.skip is False:
+                for key in dataset_dict:
+                    dataset_dict[key].append(getattr(item, key))
+        for key in dataset_dict:
+            dataset_dict[key] = np.array(dataset_dict[key])
+            
+        X = [dataset_dict["input_ids"], dataset_dict["token_type_ids"], dataset_dict["attention_mask"]]
+        Y = [dataset_dict["start_token_idx"], dataset_dict["end_token_idx"], dataset_dict["label"]]
+        return X, Y
+    else:
+        dataset_dict = {
+            "input_ids": [],
+            "token_type_ids": [],
+            "attention_mask": [],
+            "start_token_idx": [],
+            "end_token_idx": [],
+            "id": [],
+            "expansion": [],
+            "label": []
+        }
+        for item in examples:
+            if item.skip is False:
+                for key in dataset_dict:
+                    dataset_dict[key].append(getattr(item, key))
+        for key in dataset_dict:
+            if key == "id": continue
+            dataset_dict[key] = np.array(dataset_dict[key])
+        X = [dataset_dict["input_ids"], dataset_dict["token_type_ids"], dataset_dict["attention_mask"], dataset_dict["id"]]
+        Y = [dataset_dict["start_token_idx"], dataset_dict["end_token_idx"], dataset_dict["expansion"], dataset_dict["label"]]
+        return X, Y 
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default="../AAAI-21-SDU-shared-task-2-AD/dataset/train.json", 
