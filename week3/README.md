@@ -18,7 +18,7 @@
 #### Usage `python inference.py --text "tt"`
 #### 2. Improve acronym dictionary dataset
 
-#### 3. Reproduce paper <span style="background-color: #FFFF00">BERT-based Acronym Disambiguation with Multiple Training Strategies</span>
+#### 3. Reproduce paper <span style="background-color: #FFFF00">BERT-based Acronym Disambiguation with Multiple Training Strategies</span>. Results at [here](https://github.com/manred1997/vinbrain_internship/tree/week3/week3/learning_base_acronym_disambiguation)
 
 
 
