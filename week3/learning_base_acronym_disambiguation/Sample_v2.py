@@ -40,18 +40,18 @@ class Sample:
         self.start_token_idx = arc_token_idx[0]
         self.end_token_idx = arc_token_idx[-1]
 
-        # ###################### START AND END TOKEN #############################
-        # tokenized_context_ids = tokenized_context.ids
-        # tokenized_context_ids.insert(self.start_token_idx, 30522)
-        # tokenized_context_ids.insert(self.end_token_idx+2, 30523)
+        ###################### START AND END TOKEN #############################
+        tokenized_context_ids = tokenized_context.ids
+        tokenized_context_ids.insert(self.start_token_idx, 30522)
+        tokenized_context_ids.insert(self.end_token_idx+2, 30523)
 
-        # self.start_token_idx += 1
-        # self.end_token_idx += 1
+        self.start_token_idx += 1
+        self.end_token_idx += 1
         
-        # ######################################################################
+        ######################################################################
 
-        input_ids = tokenized_context.ids + tokenized_expansion.ids[1:]
-        token_type_ids = [0] * len(tokenized_context.ids) + [1] * len(tokenized_expansion.ids[1:])
+        input_ids = tokenized_context_ids + tokenized_expansion.ids[1:]
+        token_type_ids = [0] * len(tokenized_context_ids) + [1] * len(tokenized_expansion.ids[1:])
         attention_mask = [1] * len(input_ids)
         
         
