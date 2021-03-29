@@ -84,13 +84,14 @@ with torch.no_grad():
                 model_inference.append({
                     "id": ids[idx],
                     "expansion": expansion[idx],
-                    "score": output.detach().cpu().numpy()
+                    "score": float(output.detach().cpu().numpy())
                 })
         validation_pbar.update(input_word_ids.size(0))
     validation_pbar.close()
 print(f"Number of samples that is inferenced by model: {len(model_inference)}")
 with open("model_inference_on_dev.json", "w", encoding="UTF-8") as f:
     json.dump(model_inference, f)
+
 
 
 

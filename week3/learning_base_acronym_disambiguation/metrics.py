@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def accracy_score(pred: list, target: list) -> float:
+def accuracy_score(pred: list, target: list) -> float:
     """
     Metrics: Accuracy score
     args:
@@ -52,3 +52,21 @@ def precision_recall_f1(pred:list, target:list):
     macro_f1 = 2*macro_prec*macro_recall / (macro_prec+macro_recall) if macro_prec+macro_recall != 0 else 0
 
     return micro_prec, micro_recall, micro_f1, macro_prec, macro_recall, macro_f1
+
+def metrics(pred, target):
+    correct = 0
+    total_pred = 0
+    for i in range(len(pred)):
+        if target[i][0] in pred[i]: correct += 1
+        total_pred += len(pred[i])
+    recall = correct/len(target)
+    precision = correct/total_pred
+    f1_score = 2*recall*precision/(recall+precision)
+    return recall, precision, f1_score
+
+def accuracy(pred, target):
+    correct = 0
+    assert len(pred) == len(target), "Number of predictions have to be equal target"
+    for i in range(len(pred)):
+        if pred[i][0] == target[i][0]: correct += 1
+    return correct/len(pred)
