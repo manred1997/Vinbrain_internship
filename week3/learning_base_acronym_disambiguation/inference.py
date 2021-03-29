@@ -9,9 +9,11 @@ from tokenizers import BertWordPieceTokenizer
 
 
 class AcronymExpansionModel:
-    def __init__(self, acronym_long_dict, acronym_short_dict=None, model=None, config, vocab):
-        self.acn_dict = self.load_dict(acronym_long_dict, acronym_short_dict)
-        self.model = AcrBertModel(model, config)
+    def __init__(self, acronym_long_dict, model, config, vocab):
+        self.acn_dict = self.load_dict(acronym_long_dict)
+        self.model = AcrBertModel.from_pretrained(pretrained_model_name_or_path=model, 
+                                                    config=config)
+        # print(self.model)
         self.tokenizer = BertWordPieceTokenizer(vocab, lowercase=True)
 
     def expand_acronym(self, text):
@@ -23,11 +25,12 @@ class AcronymExpansionModel:
         acr = get_acr(text)
         if acr is None:
             return []
+        # print(acr)
 
         full_texts = self.select(acr, text)
         return full_texts
     
-    def load_dict(self, acronym_long_dict, acronym_short_dict):
+    def load_dict(self, acronym_long_dict):
         """
         MODIFY this
         
@@ -35,15 +38,15 @@ class AcronymExpansionModel:
         """
         with open(acronym_long_dict, 'r', encoding='utf8') as f:
             acronym_dict = json.load(f)
-        if acronym_short_dict is not None:
-            with open(acronym_short_dict, 'r', encoding='utf8') as f:
-                data = json.load(f)
-                for key, value in data.items():
-                    try: acronym_dict[key].extend(value)
-                    except: acronym_dict[key] = value
+        # if acronym_short_dict is not None:
+        #     with open(acronym_short_dict, 'r', encoding='utf8') as f:
+        #         data = json.load(f)
+        #         for key, value in data.items():
+        #             try: acronym_dict[key].extend(value)
+        #             except: acronym_dict[key] = value
         return acronym_dict
 
-    def preprocessing(self, acronym, text)
+    def preprocessing(self, acronym, text):
         start_char_idx = text.find(acronym)
         end_char_idx = start_char_idx + len(acronym)
         tokenized_context = self.tokenizer.encode(text)
@@ -56,14 +59,15 @@ class AcronymExpansionModel:
         start_token_idx = torch.tensor(arc_token_idx[0], dtype=torch.int64)
         end_token_idx = torch.tensor(arc_token_idx[-1], dtype=torch.int64)
 
-        return tokenized_context, start_token_idx, end_token_idx
+        return tokenized_context, start_token_idx.unsqueeze(0), end_token_idx.unsqueeze(0)
 
     def predict(self, input_ids, token_type_ids, attention_mask, start_token_idx, end_token_idx):
-        prop, _ = self.model(input_ids,
-                                token_type_ids,
-                                attention_mask,
-                                start_token_idx,
-                                end_token_idx)
+        prop, tmp = self.model(input_ids=input_ids,
+                        token_type_ids=token_type_ids,
+                        attention_mask=attention_mask,
+                        start_token_idx=start_token_idx,
+                        end_token_idx=end_token_idx)
+        
         return prop
     
 
@@ -79,9 +83,9 @@ class AcronymExpansionModel:
                 return self.acn_dict.get(acronym)[:min(5, len(self.acn_dict.get(acronym)))]
             else: return ""
         else:
-            if self.acn_dict.get(acronym, ""):
+            if self.acn_dict.get(acronym.upper(), ""):
                 tokenized_context, start_token_idx, end_token_idx = self.preprocessing(acronym, text)
-                list_expansion = self.acn_dict.get(acronym, "")
+                list_expansion = self.acn_dict.get(acronym.upper(), "")
                 props = []
                 for expansion in list_expansion:
                     tokenized_expansion = self.tokenizer.encode(expansion)
@@ -94,9 +98,10 @@ class AcronymExpansionModel:
                         token_type_ids = token_type_ids + ([0]* padding_length)
                         attention_mask = attention_mask + ([0]* padding_length)
 
-                    input_ids = torch.tensor(input_ids, dtype=torch.int64)
-                    token_type_ids = torch.tensor(token_type_ids, dtype=torch.int64)
-                    attention_mask = torch.tensor(attention_mask, dtype=torch.float)
+                    input_ids = torch.tensor(input_ids, dtype=torch.int64).unsqueeze(0)
+                    token_type_ids = torch.tensor(token_type_ids, dtype=torch.int64).unsqueeze(0)
+                    attention_mask = torch.tensor(attention_mask, dtype=torch.float).unsqueeze(0)
+                    # prop = self.predict(input_ids, token_type_ids, attention_mask, start_token_idx, end_token_idx)
                     props.append(int(self.predict(input_ids, token_type_ids, attention_mask, start_token_idx, end_token_idx)))
                 return list_expansion[int(np.argmax(props))]
 
