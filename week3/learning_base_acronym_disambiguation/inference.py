@@ -9,7 +9,10 @@ from tokenizers import BertWordPieceTokenizer
 
 
 class AcronymExpansionModel:
-    def __init__(self, acronym_long_dict, model, config, vocab):
+    def __init__(self, acronym_long_dict="../AAAI-21-SDU-shared-task-2-AD/dataset/diction.json", 
+                        model="./bert_base/weights_epoch51.pth",
+                        config= "./bert_base/config.json",
+                        vocab="./slow_token/vocab.txt"):
         self.acn_dict = self.load_dict(acronym_long_dict)
         self.model = AcrBertModel.from_pretrained(pretrained_model_name_or_path=model, 
                                                     config=config)
@@ -61,7 +64,12 @@ class AcronymExpansionModel:
 
         return tokenized_context, start_token_idx.unsqueeze(0), end_token_idx.unsqueeze(0)
 
-    def predict(self, input_ids, token_type_ids, attention_mask, start_token_idx, end_token_idx):
+    def predict(self, input_ids,
+                        token_type_ids,
+                        attention_mask,
+                        start_token_idx,
+                        end_token_idx):
+                        
         prop, _ = self.model(input_ids=input_ids,
                         token_type_ids=token_type_ids,
                         attention_mask=attention_mask,
