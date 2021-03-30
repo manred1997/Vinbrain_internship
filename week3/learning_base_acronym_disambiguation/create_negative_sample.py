@@ -20,6 +20,7 @@ def negative_data(positive_data:list, diction:dict, mode="train") -> list:
         }
         and
         diction: dictionary of acronym and able expansion respectively
+        mode: "train" or "dev"
     """
 
     neg_data = []
