@@ -8,26 +8,27 @@ def chunk(list_text, chunk_len):
         yield list_text[i: i + chunk_len]
 
 def get_data(acronym, expansion, line):
-    if re.search(expansion, line):
-        if len(re.finditer(expansion, line)) > 1:  return {}
-        else:
-            start_char_idx = list(re.finditer(expansion, line))[0].span()[0]
-            len_acronym = len(acronym)
-            line = re.sub(expansion, acronym, line)
+    if re.search(expansion, line):    
+        start_char_idx = list(re.finditer(expansion, line))[0].span()[0]
+        len_acronym = len(acronym)
+        line = re.sub(expansion, acronym, line)
+        line = line.split("\n")[0]
+        if len(line) > 10:
+        # print(line)
             return {
                 "text": line,
                 "start_char_idx": start_char_idx,
                 "length_acronym": len_acronym,
                 "expansion": expansion
             }
-    else: return {}
+    
 
 def build_dataset(data_info):
     tmp = []
     for line in data_info['lines']:
-        try:
-            tmp.append(get_data(data_info['acronym'], data_info['expansion'], line))
-        except: continue
+        sample = get_data(data_info['acronym'], data_info['expansion'], line)
+        if not sample: continue
+        else: tmp.append(sample)
     return tmp
     
 
@@ -35,21 +36,28 @@ if __name__ == "__main__":
     with open("./final_long_dict.json", "r", encoding="UTF-8") as f:
         diction = json.load(f)
 
-    with open("./data/cleaned_data.txt", "r", encoding="UTF-8") as f:
+    print(len(diction))
+    with open("./cxrv2.txt", "r", encoding="UTF-8") as f:
         data = []
         for line in f.readlines():
-            data.append(line)
+            list_line = line.split("\n")[0]
+            data.append(list_line)
+    
+    print(len(data))
 
     procs = cpu_count()
     print(procs)
 
     dataset = []
     num_line_per_proc = len(data) // procs
-    for acronym, expansions in diction.items():
+    print(num_line_per_proc)
+    for idx, (acronym, expansions) in enumerate(diction.items()):
+        print(f"=================={acronym}==================")
         for expansion in expansions:
+            print(f"=================={expansion}==================")
             chunked_lists = list(chunk(data, num_line_per_proc))
             data_info = []
-            for acr_exp, chunked_list in zip((acronym, expansion), chunked_lists):
+            for acr_exp, chunked_list in zip([(acronym, expansion)]*num_line_per_proc, chunked_lists):
 
                 chunk_info = {
                     'lines': chunked_list,
@@ -62,5 +70,5 @@ if __name__ == "__main__":
             pool = Pool(processes=procs)
             dataset.extend(pool.map(build_dataset, data_info))
 
-    with open("train.json", "w", encoding="UTF-8") as f:
+    with open(f"train.json", "w", encoding="UTF-8") as f:
         json.dump(dataset, f)
