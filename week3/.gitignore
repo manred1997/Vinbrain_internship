@@ -9,3 +9,13 @@ learning_base_acronym_disambiguation/slow_token/
 learning_base_acronym_disambiguation/bert_base
 learning_base_acronym_disambiguation/dev_data/
 learning_base_acronym_disambiguation/results/model_inference_on_dev.json
+train_data/
+cxrv2.txt
+train.json
+sentences_800k_subtract_drill_1.txt
+vi_data_final_train/
+vi_data_final_train_small/
+combine.ipynb
+vi_final_long_dict_fix.json
+vi_final_train_data.json
+vi_final_train_data_small.json

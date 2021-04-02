@@ -33,42 +33,45 @@ def build_dataset(data_info):
     
 
 if __name__ == "__main__":
-    with open("./final_long_dict.json", "r", encoding="UTF-8") as f:
+    with open("./vi_final_long_dict_fix.json", "r", encoding="UTF-8") as f:
         diction = json.load(f)
 
     print(len(diction))
-    with open("./cxrv2.txt", "r", encoding="UTF-8") as f:
+    with open("./sentences_800k_subtract_drill_1.txt", "r", encoding="UTF-8") as f:
         data = []
         for line in f.readlines():
             list_line = line.split("\n")[0]
             data.append(list_line)
     
-    print(len(data))
+    # print(len(data))
 
-    procs = cpu_count()
-    print(procs)
+    procs = 4#cpu_count()
+    # print(procs)
 
-    dataset = []
+    
     num_line_per_proc = len(data) // procs
-    print(num_line_per_proc)
+    # print(num_line_per_proc)
     for idx, (acronym, expansions) in enumerate(diction.items()):
-        print(f"=================={acronym}==================")
-        for expansion in expansions:
-            print(f"=================={expansion}==================")
-            chunked_lists = list(chunk(data, num_line_per_proc))
-            data_info = []
-            for acr_exp, chunked_list in zip([(acronym, expansion)]*num_line_per_proc, chunked_lists):
+        if idx == 54:
+            dataset = []
+            print(f"=================={acronym}==================")
+            for expansion in expansions:
+                print(f"=================={expansion}==================")
+                chunked_lists = list(chunk(data, num_line_per_proc))
+                data_info = []
+                for acr_exp, chunked_list in zip([(acronym, expansion)]*num_line_per_proc, chunked_lists):
 
-                chunk_info = {
-                    'lines': chunked_list,
-                    'acronym': acr_exp[0],
-                    'expansion': acr_exp[1]
-                }
+                    chunk_info = {
+                        'lines': chunked_list,
+                        'acronym': acr_exp[0],
+                        'expansion': acr_exp[1]
+                    }
 
-                data_info.append(chunk_info)
-                
-            pool = Pool(processes=procs)
-            dataset.extend(pool.map(build_dataset, data_info))
+                    data_info.append(chunk_info)
+                    
+                pool = Pool(processes=procs)
+                dataset.extend(pool.map(build_dataset, data_info))
 
-    with open(f"train.json", "w", encoding="UTF-8") as f:
-        json.dump(dataset, f)
+            with open(f"./vi_data_final_train_small/train_{acronym}.json", "w", encoding="UTF-8") as f:
+                json.dump(dataset, f)
+            del dataset
