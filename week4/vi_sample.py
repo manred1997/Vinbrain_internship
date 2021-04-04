@@ -2,8 +2,25 @@ from tqdm import tqdm
 import sys
 from colorama import Fore
 
+def offsets(token, text): #Slow_token
+    offsets_span = []
+    for i in token:
+        if i == '<unk>': len_i = 1
+        else: len_i = len(i.split("@")[0])
+
+        if not offsets_span:
+            offsets_span.append((0, len_i))
+        else:
+            len_whitespace = len(text[offsets_span[-1][1]:]) - len(text[offsets_span[-1][1]:].lstrip())
+            if len_whitespace > 0:
+                offsets_span.append((offsets_span[-1][1]+len_whitespace, offsets_span[-1][1]+len_whitespace + len_i))
+            else:
+                offsets_span.append((offsets_span[-1][1],offsets_span[-1][1] + len_i))
+    return offsets_span
+        
+
 class Sample:
-    def __init__(self, tokenizer, expansion, context, start_char_idx, len_acronym, label, max_seq_lenght=384):
+    def __init__(self, tokenizer, expansion, context, start_char_idx, len_acronym, label, max_seq_lenght=256):
         self.tokenizer = tokenizer #tokenizer BertWordPieceTokenizer
         self.expansion = expansion
         self.context = context
@@ -19,8 +36,8 @@ class Sample:
         self.label = int(label)
         
     def preprocess(self):
-        tokenized_expansion = self.tokenizer.encode(self.expansion)
-        tokenized_context = self.tokenizer.encode(self.context)
+        tokenized_expansion = self.tokenizer(self.expansion)
+        tokenized_context = self.tokenizer(self.context)
         
         end_char_idx = self.start_char_idx + self.len_acronym
         if end_char_idx > len(self.context): 
@@ -31,14 +48,16 @@ class Sample:
         for idx in range(self.start_char_idx, end_char_idx):
             is_char_in_context[idx] = 1
         
+        tokens = self.tokenizer.convert_ids_to_tokens(tokenized_context["input_ids"][1:-1])
+        offsets_span = offsets(tokens, self.context)
         arc_token_idx  = []
-        for idx, (start, end) in enumerate(tokenized_context.offsets):
+        for idx, (start, end) in enumerate(offsets_span):
             if sum(is_char_in_context[start:end]) > 0: arc_token_idx.append(idx)
         if len(arc_token_idx) == 0:
             self.skip = True
             return
-        self.start_token_idx = arc_token_idx[0]
-        self.end_token_idx = arc_token_idx[-1]
+        self.start_token_idx = arc_token_idx[0] + 1
+        self.end_token_idx = arc_token_idx[-1] + 1
 
         # ###################### START AND END TOKEN #############################
         # tokenized_context_ids = tokenized_context.ids
@@ -50,8 +69,8 @@ class Sample:
         
         # ######################################################################
 
-        input_ids = tokenized_context.ids + tokenized_expansion.ids[1:]
-        token_type_ids = [0] * len(tokenized_context.ids) + [1] * len(tokenized_expansion.ids[1:])
+        input_ids = tokenized_context["input_ids"] + tokenized_expansion["input_ids"][1:]
+        token_type_ids = tokenized_context["token_type_ids"] + [1]*len(tokenized_expansion["token_type_ids"][1:])
         attention_mask = [1] * len(input_ids)
         
         
@@ -78,10 +97,10 @@ def create_examples(raw_data, desc, tokenizer):
         expansion = item["expansion"]
         context = item["text"]
         start_char_idx = item["start_char_idx"]
-        lenght_acronym = item["lenght_acronym"]
+        length_acronym = item["length_acronym"]
         label = item["label"]
         # ids  = item["id"]
-        example = Sample(tokenizer, expansion, context, start_char_idx, lenght_acronym, label)
+        example = Sample(tokenizer, expansion, context, start_char_idx, length_acronym, label)
         example.preprocess()
         examples.append(example)
         p_bar.update(1)

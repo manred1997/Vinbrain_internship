@@ -1,2 +1,7 @@
 data_vi/
 __pycache__/
+data_cxr_ad/
+data_cxr/
+combine.ipynb
+cxr.txt
+final_long_dict.json

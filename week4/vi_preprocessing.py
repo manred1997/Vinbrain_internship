@@ -39,6 +39,8 @@ def create_inputs_targets(examples):
         if item.skip is False:
             for key in dataset_dict:
                 dataset_dict[key].append(getattr(item, key))
+    # for key in dataset_dict:
+    #     dataset_dict[key] = np.array(dataset_dict[key])
         
     X = [dataset_dict["input_ids"], dataset_dict["token_type_ids"], dataset_dict["attention_mask"]]
     Y = [dataset_dict["start_token_idx"], dataset_dict["end_token_idx"], dataset_dict["label"]]
