@@ -27,8 +27,8 @@ def negative_data(positive_data:list, diction:dict) -> list:
             acronym = sample["text"][sample["start_char_idx"]:sample["start_char_idx"]+sample['length_acronym']]
             list_neg_expansion = diction[acronym].copy()
             list_neg_expansion.remove(sample["expansion"])
-            if len(list_neg_expansion) > 1: 
-                list_neg_expansion = random.sample(list_neg_expansion, random.randint(1,2))
+            # if len(list_neg_expansion) > 1: 
+            #     list_neg_expansion = random.sample(list_neg_expansion, random.randint(1,2))
             for i in list_neg_expansion:
                 neg_data.append(sample.copy())
                 neg_data[tmp]["expansion"] = i
@@ -41,11 +41,11 @@ def negative_data(positive_data:list, diction:dict) -> list:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_pos", type=str, default="./data_vi/train_pos_data.json", 
+    parser.add_argument("--data_pos", type=str, default="./data_cxr/pos_data.json", 
                         help= "Positive dataset for Acronym Disambiguation")
-    parser.add_argument("--diction", type=str, default="./data_vi/vi_final_long_dict_fix.json",
+    parser.add_argument("--diction", type=str, default="./final_long_dict.json",
                         help= "Dictionary dataset for Acronym Disambiguation")
-    parser.add_argument("--data_neg", type=str, default="./data_vi",
+    parser.add_argument("--data_neg", type=str, default="./data_cxr",
                         help= "Folder for sampling negative dataset")
     parser.add_argument("--mode", type=str, default="train",
                         help= "Mode of dataset")
@@ -63,6 +63,6 @@ if __name__ == "__main__":
     data_neg = negative_data(data_pos, diction)
     print(f"Number of samples: {len(data_neg)}")
 
-    with open(os.path.join(args.data_neg, f"{args.mode}_neg_data.json"), "w", encoding="UTF-8") as f:
+    with open(os.path.join(args.data_neg, f"neg_data.json"), "w", encoding="UTF-8") as f:
         json.dump(data_neg, f)
 
